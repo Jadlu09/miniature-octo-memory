@@ -80,9 +80,29 @@ class _FormScreenState extends State<FormScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   // Form widget to validate and save user input
-                  child: type == 'Sign In'
-                      ? const SignInForm()
-                      : const SignUpForm(),
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
+                      // Determine the direction of the animation based on the key
+                      final inAnimation = Tween<Offset>(
+                        begin: const Offset(1.0, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation);
+                      final outAnimation = Tween<Offset>(
+                        begin: const Offset(-1.0, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation);
+
+                      return child.key == const ValueKey('SignUpForm')
+                          ? SlideTransition(position: inAnimation, child: child)
+                          : SlideTransition(
+                              position: outAnimation, child: child);
+                    },
+                    child: type == 'Sign In'
+                        ? const SignInForm(key: ValueKey('SignInForm'))
+                        : const SignUpForm(key: ValueKey('SignUpForm')),
+                  ),
                 ),
               ),
             ),
