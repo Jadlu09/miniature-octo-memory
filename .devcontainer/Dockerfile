@@ -15,3 +15,5 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
 RUN npm install -g firebase-tools
 
 RUN dart pub global activate flutterfire_cli
+
+RUN flutter pub get
